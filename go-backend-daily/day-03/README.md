@@ -129,7 +129,7 @@ Prefer switch when matching one value against many known alternatives; prefer if
 3. `findFirstEven(numbers []int) (int,bool)`: return first even; false if none.
 4. `normalizeRole(role string) string`: admin/administrator → ADMIN; driver → DRIVER; maintenance/mechanic → MAINTENANCE; otherwise UNKNOWN. Ignore case and surrounding spaces.
 5. Add a maximum of 5 attempts to a retry loop and stop as soon as success is simulated.
-Solutions 1–4 are in `exercises/solutions.go`. Run: `go run ./day-03/exercises`.
+Solutions 1–5 are in `exercises/solutions.go`. The retry solution simulates success on attempt 3 and returns immediately. Run: `go run ./day-03/exercises`.
 
 ## 9. Interview questions
 1. **Does Go have while?** No; condition-only `for` is used.
