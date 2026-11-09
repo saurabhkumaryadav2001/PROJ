@@ -39,10 +39,22 @@ func normalizeRole(role string) string {
 	}
 }
 
+// retryUntilSuccess stops after a successful simulated attempt or maxAttempts.
+func retryUntilSuccess(maxAttempts int) int {
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		fmt.Printf("retry attempt %d\n", attempt)
+		if attempt == 3 { // pretend the third attempt succeeds
+			return attempt
+		}
+	}
+	return 0 // zero means all attempts failed
+}
+
 func main() {
 	fmt.Println("temperature 24:", classifyTemperature(24))
 	fmt.Println("positive count:", countPositive([]int{-2, 0, 4, 7, -1, 9}))
 	value, ok := findFirstEven([]int{3, 5, 8, 11})
 	if ok { fmt.Println("first even:", value) } else { fmt.Println("no even number") }
 	fmt.Println("role:", normalizeRole("  Admin "))
+	fmt.Println("successful attempt:", retryUntilSuccess(5))
 }
