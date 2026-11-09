@@ -4,7 +4,7 @@ Sequential daily curriculum from fundamentals to production backend.
 
 - Day 01: Go foundations, packages, main, variables, types, zero values, constants, fmt
 - Day 02: Functions, parameters, return values, scope, errors
-- Day 03: Control flow, loops, switch
+- Day 03: Control flow, if/else, for/range, switch, break/continue
 - Day 04: Arrays, slices, maps
 - Day 05: Structs, methods, pointers
 - Day 06: Interfaces and composition
