@@ -6,8 +6,8 @@ Sequential daily curriculum from fundamentals to production backend.
 - Day 02: Functions, parameters, return values, scope, errors
 - Day 03: Control flow, if/else, for/range, switch, break/continue
 - Day 04: Arrays, slices, maps
-- Day 05: Structs, methods, pointers (completed: [lesson](day-05/README.md), [code](day-05/structs/main.go), [exercises](day-05/exercises/solutions.go))
-- Day 06: Interfaces and composition
+- Day 05: Structs, methods, pointers ([lesson](day-05/README.md), [code](day-05/structs/main.go), [exercises](day-05/exercises/solutions.go))
+- Day 06: Interfaces, implicit satisfaction, interface values, type assertions/switches, typed nil, composition, dependency inversion ([lesson](day-06/README.md), [code](day-06/interfaces/main.go), [exercises](day-06/exercises/solutions.go))
 - Day 07: Error handling patterns
 - Day 08: Packages, modules, dependency management
 - Day 09: JSON and file I/O
