@@ -84,14 +84,14 @@ type Notifier interface { Notify(message string) }
 type CardProcessor struct { Provider string }
 func (c CardProcessor) Charge(amountCents int) error {
     if amountCents <= 0 { return errors.New("amount must be positive") }
-    fmt.Printf("[%s] charged %d cents\\n", c.Provider, amountCents)
+    fmt.Printf("[%s] charged %d cents\n", c.Provider, amountCents)
     return nil
 }
 
 type WalletProcessor struct { WalletID string }
 func (w *WalletProcessor) Charge(amountCents int) error {
     if amountCents <= 0 { return errors.New("amount must be positive") }
-    fmt.Printf("[wallet %s] charged %d cents\\n", w.WalletID, amountCents)
+    fmt.Printf("[wallet %s] charged %d cents\n", w.WalletID, amountCents)
     return nil
 }
 
