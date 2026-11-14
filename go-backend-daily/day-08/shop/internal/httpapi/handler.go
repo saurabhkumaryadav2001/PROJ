@@ -8,11 +8,13 @@ import (
 )
 
 // Handler is the HTTP adapter for catalog operations.
-type Handler struct{}
+type Handler struct {
+	products []catalog.Product
+}
 
-// NewHandler constructs the HTTP handler.
-func NewHandler() *Handler {
-	return &Handler{}
+// NewHandler receives catalog data from the composition root.
+func NewHandler(products []catalog.Product) *Handler {
+	return &Handler{products: products}
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +26,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/products":
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		_ = json.NewEncoder(w).Encode(catalog.List())
+		_ = json.NewEncoder(w).Encode(h.products)
 	default:
 		http.NotFound(w, r)
 	}
