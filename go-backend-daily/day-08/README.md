@@ -142,8 +142,8 @@ The server uses only the standard library; no external dependency is needed, so 
 ### internal/httpapi/handler.go
 - `package httpapi` is a separate transport package.
 - Imports `encoding/json`, `net/http`, and the catalog package by module path.
-- `Handler` stores the catalog dependency.
-- `NewHandler` is the public constructor.
+- `Handler` stores catalog product data supplied by the composition root.
+- `NewHandler` is the public constructor and accepts catalog data.
 - `ServeHTTP` implements `http.Handler`.
 - Routes are selected by path; JSON encoding is performed at the HTTP boundary.
 - Domain package does not import `net/http`, so business code can be reused by workers/CLI.
@@ -151,7 +151,7 @@ The server uses only the standard library; no external dependency is needed, so 
 ### cmd/api/main.go
 - `package main` creates an executable.
 - Imports the HTTP package and standard library.
-- Wires the catalog into the handler (composition root).
+- Loads catalog data and wires it into the handler (composition root).
 - Starts the server and reports startup errors.
 
 ## 10. Exercise
