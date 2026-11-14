@@ -9,7 +9,7 @@ Sequential daily curriculum from fundamentals to production backend.
 - Day 05: Structs, methods, pointers ([lesson](day-05/README.md), [code](day-05/structs/main.go), [exercises](day-05/exercises/solutions.go))
 - Day 06: Interfaces, implicit satisfaction, interface values, type assertions/switches, typed nil, composition, dependency inversion ([lesson](day-06/README.md), [code](day-06/interfaces/main.go), [exercises](day-06/exercises/solutions.go))
 - Day 07: Error handling patterns, sentinel errors, custom errors, wrapping, errors.Is/errors.As, domain-to-HTTP mapping ([lesson](day-07/README.md), [code](day-07/errors/main.go), [exercises](day-07/exercises/solutions.go))
-- Day 08: Packages, modules, dependency management
+- Day 08: Packages, modules, dependency management ([lesson](day-08/README.md), [API main](day-08/shop/cmd/api/main.go), [catalog](day-08/shop/internal/catalog/catalog.go), [HTTP adapter](day-08/shop/internal/httpapi/handler.go), [exercise](day-08/exercises/demo/main.go))
 - Day 09: JSON and file I/O
 - Day 10: HTTP server and REST APIs
 - Day 11: Middleware, routing, request validation
