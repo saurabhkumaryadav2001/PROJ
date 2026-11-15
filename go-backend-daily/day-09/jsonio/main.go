@@ -31,7 +31,7 @@ type CreateProductRequest struct {
 
 var ErrInvalidProduct = errors.New("invalid product")
 
-func (req CreateProductRequest) Validate() error {
+func (req *CreateProductRequest) Validate() error {
 	req.SKU = strings.TrimSpace(req.SKU)
 	req.Name = strings.TrimSpace(req.Name)
 
