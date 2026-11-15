@@ -29,8 +29,6 @@ type CreateProductRequest struct {
 	Tags  []string `json:"tags,omitempty"`
 }
 
-var ErrInvalidProduct = errors.New("invalid product")
-
 func (req *CreateProductRequest) Validate() error {
 	req.SKU = strings.TrimSpace(req.SKU)
 	req.Name = strings.TrimSpace(req.Name)
@@ -122,7 +120,10 @@ func main() {
 
 	products, err := readProducts(dataPath)
 	if err != nil {
-		fmt.Println("Initial read:", err)
+		if !errors.Is(err, os.ErrNotExist) {
+			fmt.Println("Initial read:", err)
+			return
+		}
 		products = []Product{
 			{ID: 1, SKU: "KB-01", Name: "Keyboard", Price: 1499, Tags: []string{"input", "office"}, CreatedAt: time.Date(2026, 1, 10, 9, 0, 0, 0, time.UTC)},
 			{ID: 2, SKU: "MS-01", Name: "Mouse", Price: 799, CreatedAt: time.Date(2026, 1, 11, 9, 0, 0, 0, time.UTC)},
