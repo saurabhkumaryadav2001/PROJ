@@ -135,6 +135,10 @@ func (r *SQLRepository) ListProducts(ctx context.Context, limit, offset int) ([]
 // CreateOrder uses one transaction for stock decrement + order insertion.
 // The conditional UPDATE prevents two concurrent requests from overselling stock.
 func (r *SQLRepository) CreateOrder(ctx context.Context, input CreateOrderInput) (Order, error) {
+	if input.ProductID <= 0 || input.Quantity <= 0 {
+		return Order{}, errors.New("product ID and quantity must be positive")
+	}
+
 	tx, err := r.db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelReadCommitted})
 	if err != nil {
 		return Order{}, fmt.Errorf("begin order transaction: %w", err)
