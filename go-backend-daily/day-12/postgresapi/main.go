@@ -53,7 +53,8 @@ func main() {
 	select {
 	case err := <-serverErrors:
 		if !errors.Is(err, http.ErrServerClosed) {
-			logger.Fatalf("HTTP server failed: %v", err)
+			logger.Printf("HTTP server failed: %v", err)
+			return // allow deferred database cleanup to run
 		}
 	case <-stopCtx.Done():
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
