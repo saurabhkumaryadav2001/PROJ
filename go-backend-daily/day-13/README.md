@@ -89,7 +89,7 @@ go run ./day-13/contextapi
 go test ./day-13/contextapi
 go test -race ./day-13/contextapi
 go vet ./day-13/contextapi
-go build -o ./bin/context-api ./day-13/contextapi
+go build -o context-api ./day-13/contextapi
 ~~~
 
 Set a different port in PowerShell if 8080 is occupied:
