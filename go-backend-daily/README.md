@@ -13,10 +13,11 @@ Sequential daily curriculum from fundamentals to production backend.
 - Day 09: JSON & File I/O ([lesson](day-09/README.md), [runnable example](day-09/jsonio/main.go), [tests](day-09/jsonio/main_test.go), [sample data](day-09/jsonio/data/products.json))
 - Day 10: HTTP server and REST APIs ([lesson](day-10/README.md), [runnable REST API](day-10/restapi/main.go), [tests](day-10/restapi/main_test.go))
 - Day 11: Middleware, routing, request validation ([lesson](day-11/README.md), [server](day-11/middlewareapi/main.go), [middleware](day-11/middlewareapi/middleware.go), [handlers](day-11/middlewareapi/handlers.go), [tests](day-11/middlewareapi/main_test.go))
-- Day 12: PostgreSQL, database/sql, connection pooling and SQL transactions ([lesson](day-12/README.md), [API](day-12/postgresapi/main.go), [database pool](day-12/postgresapi/db.go), [driver registration](day-12/postgresapi/driver_postgres.go), [repository and transaction](day-12/postgresapi/repository.go), [handlers](day-12/postgresapi/handlers.go), [migration](day-12/postgresapi/migrations/001_create_products_and_orders.sql), [tests](day-12/postgresapi/main_test.go))
-- **Day 13: Context, cancellation, timeouts, request propagation, bounded cancellable workers and graceful shutdown** ([lesson](day-13/README.md), [server](day-13/contextapi/main.go), [request metadata/logging](day-13/contextapi/context.go), [handlers](day-13/contextapi/handlers.go), [worker pool](day-13/contextapi/work.go), [tests](day-13/contextapi/main_test.go))
-- Day 14: Goroutines, channels, synchronization
-- Day 15+: testing, Docker, config, logging, auth, observability, CI/CD, project build
+- Day 12: PostgreSQL, database/sql, connection pooling and SQL transactions ([lesson](day-12/README.md), [API](day-12/postgresapi/main.go), [database pool](day-12/postgresapi/db.go), [driver registration](day-12/postgresapi/driver_postgres.go), [repository and transaction](day-12/postgresapi/repository.go), [migration](day-12/postgresapi/migrations/001_create_products_and_orders.sql), [tests](day-12/postgresapi/main_test.go))
+- Day 13: Context, cancellation, timeouts, request propagation, bounded cancellable workers and graceful shutdown ([lesson](day-13/README.md), [server](day-13/contextapi/main.go), [middleware](day-13/contextapi/context.go), [handlers](day-13/contextapi/handlers.go), [worker pool](day-13/contextapi/work.go), [tests](day-13/contextapi/main_test.go))
+- **Day 14: Goroutines, channels, select, WaitGroup, Mutex/RWMutex, fan-out/fan-in, backpressure and bounded worker pools** ([lesson](day-14/README.md), [server](day-14/concurrencyapi/main.go), [worker pool](day-14/concurrencyapi/pool.go), [race-safe metrics](day-14/concurrencyapi/metrics.go), [HTTP handlers](day-14/concurrencyapi/handlers.go), [tests](day-14/concurrencyapi/main_test.go))
+- Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, integration tests, coverage and race testing
+- Day 16+: Docker, configuration, structured logging, authentication, observability, CI/CD and capstone project
 
 Complete each day's exercises before moving to the next.
 
@@ -47,4 +48,24 @@ go run ./day-13/contextapi
 go test ./day-13/contextapi
 go test -race ./day-13/contextapi
 go vet ./day-13/contextapi
+~~~
+
+## Day 14 quick start
+
+Day 14 uses only the standard library. Configure the worker count and bounded queue, then run:
+
+~~~bash
+WORKERS=4 QUEUE_SIZE=8 go run ./day-14/concurrencyapi
+go test ./day-14/concurrencyapi
+go test -race ./day-14/concurrencyapi
+go vet ./day-14/concurrencyapi
+go build -o ./bin/concurrency-api ./day-14/concurrencyapi
+~~~
+
+PowerShell:
+
+~~~powershell
+$env:WORKERS = "4"
+$env:QUEUE_SIZE = "8"
+go run ./day-14/concurrencyapi
 ~~~
