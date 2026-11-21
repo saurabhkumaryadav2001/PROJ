@@ -16,7 +16,7 @@ Sequential daily curriculum from fundamentals to production backend.
 - Day 12: PostgreSQL, database/sql, connection pooling and SQL transactions ([lesson](day-12/README.md), [API](day-12/postgresapi/main.go), [database pool](day-12/postgresapi/db.go), [driver registration](day-12/postgresapi/driver_postgres.go), [repository and transaction](day-12/postgresapi/repository.go), [migration](day-12/postgresapi/migrations/001_create_products_and_orders.sql), [tests](day-12/postgresapi/main_test.go))
 - Day 13: Context, cancellation, timeouts, request propagation, bounded cancellable workers and graceful shutdown ([lesson](day-13/README.md), [server](day-13/contextapi/main.go), [middleware](day-13/contextapi/context.go), [handlers](day-13/contextapi/handlers.go), [worker pool](day-13/contextapi/work.go), [tests](day-13/contextapi/main_test.go))
 - **Day 14: Goroutines, channels, select, WaitGroup, Mutex/RWMutex, fan-out/fan-in, backpressure and bounded worker pools** ([lesson](day-14/README.md), [server](day-14/concurrencyapi/main.go), [worker pool](day-14/concurrencyapi/pool.go), [race-safe metrics](day-14/concurrencyapi/metrics.go), [HTTP handlers](day-14/concurrencyapi/handlers.go), [tests](day-14/concurrencyapi/main_test.go))
-- Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, integration tests, coverage and race testing
+- **Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, PostgreSQL integration tests, coverage, fuzzing and benchmarks** ([lesson](day-15/README.md), [API](day-15/testingapi/main.go), [service](day-15/testingapi/product.go), [repositories](day-15/testingapi/repository.go), [HTTP handlers](day-15/testingapi/handler.go), [service tests](day-15/testingapi/service_test.go), [HTTP tests](day-15/testingapi/handler_test.go), [PostgreSQL integration test](day-15/testingapi/postgres_integration_test.go))
 - Day 16+: Docker, configuration, structured logging, authentication, observability, CI/CD and capstone project
 
 Complete each day's exercises before moving to the next.
@@ -68,4 +68,26 @@ PowerShell:
 $env:WORKERS = "4"
 $env:QUEUE_SIZE = "8"
 go run ./day-14/concurrencyapi
+~~~
+
+
+## Day 15 quick start
+
+The runnable API uses an in-memory repository and the standard library:
+
+~~~bash
+go run ./day-15/testingapi
+go test ./day-15/testingapi
+go test -race ./day-15/testingapi
+go vet ./day-15/testingapi
+go test -cover ./day-15/testingapi
+go test -bench=BenchmarkProductServiceCreate -benchmem ./day-15/testingapi
+go test -fuzz=FuzzParseProductID -fuzztime=10s ./day-15/testingapi
+~~~
+
+The optional PostgreSQL integration test uses the existing pgx module dependency and is excluded from the default test run:
+
+~~~bash
+go mod download github.com/jackc/pgx/v5
+TEST_DATABASE_URL="postgres://user:password@localhost:5432/testdb?sslmode=disable" go test -tags="integration pgx" ./day-15/testingapi -run TestPostgresRepositoryIntegration -v
 ~~~
