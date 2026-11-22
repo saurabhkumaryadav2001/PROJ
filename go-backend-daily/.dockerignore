@@ -1,0 +1,12 @@
+# Keep the Docker build context small and exclude local secrets/artifacts.
+.git
+.env
+.env.*
+**/.env
+**/.env.*
+**/*.log
+**/coverage.out
+**/bin/
+**/tmp/
+**/node_modules/
+**/vendor/

@@ -17,7 +17,8 @@ Sequential daily curriculum from fundamentals to production backend.
 - Day 13: Context, cancellation, timeouts, request propagation, bounded cancellable workers and graceful shutdown ([lesson](day-13/README.md), [server](day-13/contextapi/main.go), [middleware](day-13/contextapi/context.go), [handlers](day-13/contextapi/handlers.go), [worker pool](day-13/contextapi/work.go), [tests](day-13/contextapi/main_test.go))
 - **Day 14: Goroutines, channels, select, WaitGroup, Mutex/RWMutex, fan-out/fan-in, backpressure and bounded worker pools** ([lesson](day-14/README.md), [server](day-14/concurrencyapi/main.go), [worker pool](day-14/concurrencyapi/pool.go), [race-safe metrics](day-14/concurrencyapi/metrics.go), [HTTP handlers](day-14/concurrencyapi/handlers.go), [tests](day-14/concurrencyapi/main_test.go))
 - **Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, PostgreSQL integration tests, coverage, fuzzing and benchmarks** ([lesson](day-15/README.md), [API](day-15/testingapi/main.go), [service](day-15/testingapi/product.go), [repositories](day-15/testingapi/repository.go), [HTTP handlers](day-15/testingapi/handler.go), [service tests](day-15/testingapi/service_test.go), [HTTP tests](day-15/testingapi/handler_test.go), [PostgreSQL integration test](day-15/testingapi/postgres_integration_test.go))
-- Day 16+: Docker, configuration, structured logging, authentication, observability, CI/CD and capstone project
+- **Day 16: Docker, multi-stage builds, typed environment configuration, structured JSON logs, health/readiness probes, container security, Compose, networking and graceful shutdown** ([lesson](day-16/README.md), [Dockerfile](day-16/Dockerfile), [Compose](day-16/compose.yaml), [configuration](day-16/runtimeapi/config.go), [server](day-16/runtimeapi/main.go), [handlers](day-16/runtimeapi/handlers.go), [tests](day-16/runtimeapi/config_test.go))
+- Day 17+: Observability (logs, metrics and tracing), authentication, CI/CD and capstone project
 
 Complete each day's exercises before moving to the next.
 
@@ -90,4 +91,31 @@ The optional PostgreSQL integration test uses the existing pgx module dependency
 ~~~bash
 go mod download github.com/jackc/pgx/v5
 TEST_DATABASE_URL="postgres://user:password@localhost:5432/testdb?sslmode=disable" go test -tags="integration pgx" ./day-15/testingapi -run TestPostgresRepositoryIntegration -v
+~~~
+
+
+## Day 16 quick start
+
+Day 16 uses the Go standard library for the application. Run locally:
+
+~~~bash
+go test ./day-16/runtimeapi
+go test -race ./day-16/runtimeapi
+go vet ./day-16/runtimeapi
+go run ./day-16/runtimeapi
+~~~
+
+Build and run the multi-stage container from the module root:
+
+~~~bash
+docker build -f day-16/Dockerfile -t go-runtime-api:day16 .
+docker run --rm -p 8080:8080 go-runtime-api:day16
+~~~
+
+Or use Compose:
+
+~~~bash
+docker compose --env-file day-16/.env.example -f day-16/compose.yaml up --build -d
+docker compose --env-file day-16/.env.example -f day-16/compose.yaml logs -f api
+docker compose --env-file day-16/.env.example -f day-16/compose.yaml down
 ~~~
