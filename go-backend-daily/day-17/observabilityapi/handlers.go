@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
+	"runtime"
 	"strconv"
 	"sync/atomic"
 )
@@ -13,6 +14,10 @@ type API struct {
 	metrics *Metrics
 	version string
 	ready *atomic.Bool
+}
+type runtimeResponse struct {
+	Version string `json:"version"`
+	GoVersion string `json:"go_version"`
 }
 type orderResponse struct {
 	ID int64 `json:"id"`
@@ -25,6 +30,7 @@ func NewHandler(logger *slog.Logger, metrics *Metrics, version string, ready *at
 	mux.HandleFunc("GET /healthz", api.health)
 	mux.HandleFunc("GET /readyz", api.readiness)
 	mux.HandleFunc("GET /metrics", api.prometheusMetrics)
+	mux.HandleFunc("GET /api/v1/runtime", api.runtime)
 	mux.HandleFunc("GET /api/v1/orders/{id}", api.getOrder)
 	return ObservabilityMiddleware(metrics, logger, mux)
 }
@@ -36,6 +42,9 @@ func (a *API) readiness(w http.ResponseWriter, r *http.Request) {
 func (a *API) prometheusMetrics(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
 	if err := a.metrics.WritePrometheus(w); err != nil { a.logger.ErrorContext(r.Context(), "metrics_write_failed", "error", err) }
+}
+func (a *API) runtime(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, runtimeResponse{Version: a.version, GoVersion: runtime.Version()})
 }
 func (a *API) getOrder(w http.ResponseWriter, r *http.Request) {
 	ctx, endSpan := StartSpan(r.Context(), a.logger, "orders.lookup")

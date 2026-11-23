@@ -3,8 +3,6 @@ services:
     build:
       context: ..
       dockerfile: day-17/Dockerfile
-      args:
-        VERSION: ${APP_VERSION:-day17}
     image: go-observability-api:day17
     environment:
       PORT: "8080"

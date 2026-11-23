@@ -85,6 +85,7 @@ Endpoints:
 - GET /healthz — liveness.
 - GET /readyz — readiness.
 - GET /metrics — Prometheus metrics.
+- GET /api/v1/runtime — safe build/runtime metadata.
 - GET /api/v1/orders/{id} — sample order endpoint with a child span.
 
 Try:

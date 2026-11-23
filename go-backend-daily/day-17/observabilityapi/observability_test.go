@@ -116,6 +116,18 @@ func TestOrderHandlerPropagatesTraceAndCreatesChildSpan(t *testing.T) {
 	if !strings.Contains(logs.String(), "span_finished") || !strings.Contains(logs.String(), "http_request") { t.Fatalf("expected span and request logs, got %s", logs.String()) }
 }
 
+
+func TestRuntimeEndpointReturnsVersionWithoutSecrets(t *testing.T) {
+	handler := testHandler(&bytes.Buffer{})
+	recorder := httptest.NewRecorder()
+	handler.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/v1/runtime", nil))
+	if recorder.Code != http.StatusOK { t.Fatalf("status=%d", recorder.Code) }
+	var body runtimeResponse
+	if err := json.Unmarshal(recorder.Body.Bytes(), &body); err != nil { t.Fatal(err) }
+	if body.Version != "test" || body.GoVersion == "" { t.Fatalf("unexpected runtime metadata: %+v", body) }
+	if strings.Contains(recorder.Body.String(), "DATABASE_URL") || strings.Contains(recorder.Body.String(), "password") { t.Fatal("runtime endpoint exposed a secret") }
+}
+
 func TestOrderHandlerRejectsInvalidID(t *testing.T) {
 	handler := testHandler(&bytes.Buffer{})
 	recorder := httptest.NewRecorder()
