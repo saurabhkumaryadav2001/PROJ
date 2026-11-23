@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: Go Backend Daily
+    orgId: 1
+    folder: Go Backend Daily
+    type: file
+    disableDeletion: true
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

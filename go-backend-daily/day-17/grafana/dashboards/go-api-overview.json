@@ -1,0 +1,17 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "panels": [
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"reqps"},"overrides":[]},"gridPos":{"h":8,"w":12,"x":0,"y":0},"id":1,"targets":[{"expr":"sum by (route) (rate(go_http_requests_total[5m]))","legendFormat":"{{route}}","refId":"A"}],"title":"HTTP request rate by route","type":"timeseries"},
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"s"},"overrides":[]},"gridPos":{"h":8,"w":12,"x":12,"y":0},"id":2,"targets":[{"expr":"histogram_quantile(0.95, sum by (le) (rate(go_http_request_duration_seconds_bucket[5m])))","legendFormat":"p95","refId":"A"}],"title":"HTTP p95 latency","type":"timeseries"},
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"reqps"},"overrides":[]},"gridPos":{"h":8,"w":12,"x":0,"y":8},"id":3,"targets":[{"expr":"sum(rate(go_http_requests_total{status=~\\"5..\\"}[5m]))","legendFormat":"5xx errors/sec","refId":"A"}],"title":"Server error rate","type":"timeseries"},
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"short"},"overrides":[]},"gridPos":{"h":8,"w":12,"x":12,"y":8},"id":4,"targets":[{"expr":"go_http_requests_in_flight","legendFormat":"in flight","refId":"A"}],"title":"Requests currently in flight","type":"timeseries"}
+  ],
+  "refresh":"5s",
+  "schemaVersion":39,
+  "tags":["go","backend","observability"],
+  "time":{"from":"now-15m","to":"now"},
+  "title":"Go Backend API Overview",
+  "uid":"go-backend-api-overview",
+  "version":1
+}
