@@ -18,7 +18,28 @@ Sequential daily curriculum from fundamentals to production backend.
 - **Day 14: Goroutines, channels, select, WaitGroup, Mutex/RWMutex, fan-out/fan-in, backpressure and bounded worker pools** ([lesson](day-14/README.md), [server](day-14/concurrencyapi/main.go), [worker pool](day-14/concurrencyapi/pool.go), [race-safe metrics](day-14/concurrencyapi/metrics.go), [HTTP handlers](day-14/concurrencyapi/handlers.go), [tests](day-14/concurrencyapi/main_test.go))
 - **Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, PostgreSQL integration tests, coverage, fuzzing and benchmarks** ([lesson](day-15/README.md), [API](day-15/testingapi/main.go), [service](day-15/testingapi/product.go), [repositories](day-15/testingapi/repository.go), [HTTP handlers](day-15/testingapi/handler.go), [service tests](day-15/testingapi/service_test.go), [HTTP tests](day-15/testingapi/handler_test.go), [PostgreSQL integration test](day-15/testingapi/postgres_integration_test.go))
 - **Day 16: Docker, multi-stage builds, typed environment configuration, structured JSON logs, health/readiness probes, container security, Compose, networking and graceful shutdown** ([lesson](day-16/README.md), [Dockerfile](day-16/Dockerfile), [Compose](day-16/compose.yaml), [configuration](day-16/runtimeapi/config.go), [server](day-16/runtimeapi/main.go), [handlers](day-16/runtimeapi/handlers.go), [tests](day-16/runtimeapi/config_test.go))
-- Day 17+: Observability (logs, metrics and tracing), authentication, CI/CD and capstone project
+- **Day 17: Observability — structured JSON logs, Prometheus counters/gauges/histograms, bounded route labels, W3C Trace Context propagation, spans, Prometheus/Grafana and PromQL** ([lesson](day-17/README.md), [API](day-17/observabilityapi/main.go), [metrics](day-17/observabilityapi/metrics.go), [tracing](day-17/observabilityapi/trace.go), [middleware](day-17/observabilityapi/middleware.go), [tests](day-17/observabilityapi/observability_test.go), [Compose](day-17/compose.yaml))
+- Day 18: Authentication and Authorization — JWT, password hashing, middleware and RBAC
+
+## Day 17 quick start
+
+The API uses only the Go standard library:
+
+~~~bash
+go test ./day-17/observabilityapi
+go test -race ./day-17/observabilityapi
+go vet ./day-17/observabilityapi
+go test -cover ./day-17/observabilityapi
+go run ./day-17/observabilityapi
+~~~
+
+Run the local Prometheus/Grafana stack (set GRAFANA_ADMIN_PASSWORD first):
+
+~~~bash
+docker compose -f day-17/compose.yaml up --build -d
+docker compose -f day-17/compose.yaml logs -f
+docker compose -f day-17/compose.yaml down
+~~~
 
 Complete each day's exercises before moving to the next.
 
