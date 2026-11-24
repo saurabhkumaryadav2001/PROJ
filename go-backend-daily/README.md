@@ -19,7 +19,7 @@ Sequential daily curriculum from fundamentals to production backend.
 - **Day 15: Testing Go backends — table-driven tests, subtests, httptest, fakes, PostgreSQL integration tests, coverage, fuzzing and benchmarks** ([lesson](day-15/README.md), [API](day-15/testingapi/main.go), [service](day-15/testingapi/product.go), [repositories](day-15/testingapi/repository.go), [HTTP handlers](day-15/testingapi/handler.go), [service tests](day-15/testingapi/service_test.go), [HTTP tests](day-15/testingapi/handler_test.go), [PostgreSQL integration test](day-15/testingapi/postgres_integration_test.go))
 - **Day 16: Docker, multi-stage builds, typed environment configuration, structured JSON logs, health/readiness probes, container security, Compose, networking and graceful shutdown** ([lesson](day-16/README.md), [Dockerfile](day-16/Dockerfile), [Compose](day-16/compose.yaml), [configuration](day-16/runtimeapi/config.go), [server](day-16/runtimeapi/main.go), [handlers](day-16/runtimeapi/handlers.go), [tests](day-16/runtimeapi/config_test.go))
 - **Day 17: Observability — structured JSON logs, Prometheus counters/gauges/histograms, bounded route labels, W3C Trace Context propagation, spans, Prometheus/Grafana and PromQL** ([lesson](day-17/README.md), [API](day-17/observabilityapi/main.go), [metrics](day-17/observabilityapi/metrics.go), [tracing](day-17/observabilityapi/trace.go), [middleware](day-17/observabilityapi/middleware.go), [tests](day-17/observabilityapi/observability_test.go), [Compose](day-17/compose.yaml))
-- Day 18: Authentication and Authorization — JWT, password hashing, middleware and RBAC
+- **Day 18: Authentication & Authorization — PBKDF2 password hashing, HS256 JWT access tokens, opaque refresh-token rotation, Bearer middleware and RBAC** ([lesson](day-18/README.md), [auth core](day-18/authapi/core.go), [HTTP API](day-18/authapi/api.go), [tests](day-18/authapi/auth_test.go), [PostgreSQL schema](day-18/migrations/001_auth_tables.sql))
 
 ## Day 17 quick start
 
@@ -140,3 +140,19 @@ docker compose --env-file day-16/.env.example -f day-16/compose.yaml up --build 
 docker compose --env-file day-16/.env.example -f day-16/compose.yaml logs -f api
 docker compose --env-file day-16/.env.example -f day-16/compose.yaml down
 ~~~
+
+
+## Day 18 quick start
+
+Day 18 reuses the root Go module and uses the standard library:
+
+~~~bash
+gofmt -w day-18/authapi/*.go
+go test ./day-18/authapi
+go test -race ./day-18/authapi
+go vet ./day-18/authapi
+go test -cover ./day-18/authapi
+go run ./day-18/authapi
+~~~
+
+The app exposes registration, login, refresh-token rotation, GET /api/me and an admin-only GET /api/admin/users endpoint. See [Day 18 README](day-18/README.md) for curl examples, security boundaries and exercises.
