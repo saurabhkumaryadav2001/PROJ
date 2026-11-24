@@ -1,0 +1,19 @@
+services:
+  auth-api:
+    build:
+      context: ..
+      dockerfile: day-18/Dockerfile
+    image: go-auth-api:day18
+    ports:
+      - "127.0.0.1:8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
