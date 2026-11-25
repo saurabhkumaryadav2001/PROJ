@@ -20,6 +20,7 @@ Sequential daily curriculum from fundamentals to production backend.
 - **Day 16: Docker, multi-stage builds, typed environment configuration, structured JSON logs, health/readiness probes, container security, Compose, networking and graceful shutdown** ([lesson](day-16/README.md), [Dockerfile](day-16/Dockerfile), [Compose](day-16/compose.yaml), [configuration](day-16/runtimeapi/config.go), [server](day-16/runtimeapi/main.go), [handlers](day-16/runtimeapi/handlers.go), [tests](day-16/runtimeapi/config_test.go))
 - **Day 17: Observability — structured JSON logs, Prometheus counters/gauges/histograms, bounded route labels, W3C Trace Context propagation, spans, Prometheus/Grafana and PromQL** ([lesson](day-17/README.md), [API](day-17/observabilityapi/main.go), [metrics](day-17/observabilityapi/metrics.go), [tracing](day-17/observabilityapi/trace.go), [middleware](day-17/observabilityapi/middleware.go), [tests](day-17/observabilityapi/observability_test.go), [Compose](day-17/compose.yaml))
 - **Day 18: Authentication & Authorization — PBKDF2 password hashing, HS256 JWT access tokens, opaque refresh-token rotation, Bearer middleware and RBAC** ([lesson](day-18/README.md), [auth core](day-18/authapi/core.go), [HTTP API](day-18/authapi/api.go), [tests](day-18/authapi/auth_test.go), [PostgreSQL schema](day-18/migrations/001_auth_tables.sql))
+- **Day 19: PostgreSQL-backed authentication — `database/sql`, pgx, connection pooling, parameterized SQL, unique-email constraints, transactions, `SELECT FOR UPDATE`, refresh-token rotation and replay detection** ([lesson](day-19/README.md), [PostgreSQL repository](day-19/authapi/postgres_store.go), [service](day-19/authapi/service.go), [handlers](day-19/authapi/handlers.go), [migration](day-19/migrations/001_auth_tables.sql), [tests](day-19/authapi/service_test.go))
 
 ## Day 17 quick start
 
@@ -156,3 +157,23 @@ go run ./day-18/authapi
 ~~~
 
 The app exposes registration, login, refresh-token rotation, GET /api/me and an admin-only GET /api/admin/users endpoint. See [Day 18 README](day-18/README.md) for curl examples, security boundaries and exercises.
+
+
+## Day 19 quick start
+
+Day 19 uses the existing root module and the pgx v5.7.2 dependency. Apply the migration, set DATABASE_URL and a unique JWT_SECRET, then:
+
+~~~bash
+go test ./day-19/authapi
+go test -race ./day-19/authapi
+go vet ./day-19/authapi
+go run -tags pgx ./day-19/authapi
+~~~
+
+Apply the schema with:
+
+~~~bash
+psql "$DATABASE_URL" -f day-19/migrations/001_auth_tables.sql
+~~~
+
+Download the pgx driver if needed with `go mod download github.com/jackc/pgx/v5`. The real PostgreSQL integration test uses build tags `pgx integration` and TEST_DATABASE_URL.
