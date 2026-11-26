@@ -33,11 +33,11 @@ func TestPostgresMigrationRunnerIsIdempotentAndDetectsDrift(t *testing.T) {
 	}
 
 	schema := fmt.Sprintf("migration_test_%d", time.Now().UnixNano())
-	if _, err := db.ExecContext(ctx, \`CREATE SCHEMA "\`+schema+\`"\`); err != nil {
+	if _, err := db.ExecContext(ctx, `CREATE SCHEMA "`+schema+`"`); err != nil {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() {
-		_, _ = db.ExecContext(context.Background(), \`DROP SCHEMA IF EXISTS "\`+schema+\`" CASCADE\`)
+		_, _ = db.ExecContext(context.Background(), `DROP SCHEMA IF EXISTS "`+schema+`" CASCADE`)
 	})
 
 	files := fstest.MapFS{
