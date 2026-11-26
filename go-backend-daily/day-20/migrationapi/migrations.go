@@ -25,8 +25,8 @@ var (
 	ErrInvalidMigration = errors.New("invalid migration file")
 )
 
-var migrationNamePattern = regexp.MustCompile(\`^(\\d{3,})_([a-z0-9_]+)\\.up\\.sql$\`)
-var schemaPattern = regexp.MustCompile(\`^[a-z][a-z0-9_]{0,62}$\`)
+var migrationNamePattern = regexp.MustCompile(`^(\d{3,})_([a-z0-9_]+)\.up\.sql$`)
+var schemaPattern = regexp.MustCompile(`^[a-z][a-z0-9_]{0,62}$`)
 
 type Migration struct {
 	Version  int64
@@ -36,10 +36,10 @@ type Migration struct {
 }
 
 type AppliedMigration struct {
-	Version   int64     \`json:"version"\`
-	Name      string    \`json:"name"\`
-	Checksum  string    \`json:"checksum"\`
-	AppliedAt time.Time \`json:"applied_at"\`
+	Version   int64     `json:"version"`
+	Name      string    `json:"name"`
+	Checksum  string    `json:"checksum"`
+	AppliedAt time.Time `json:"applied_at"`
 }
 
 type Runner struct {
@@ -124,7 +124,7 @@ func (r Runner) schemaName() string {
 func (r Runner) openScopedConn(ctx context.Context, createSchema bool) (*sql.Conn, error) {
 	schema := r.schemaName()
 	// Schema is restricted to a conservative identifier pattern before quoting.
-	quoted := \`"\` + schema + \`"\`
+	quoted := `"` + schema + `"`
 	if createSchema {
 		if _, err := r.DB.ExecContext(ctx, "CREATE SCHEMA IF NOT EXISTS "+quoted); err != nil {
 			return nil, fmt.Errorf("create schema: %w", err)
@@ -159,24 +159,24 @@ func (r Runner) Up(ctx context.Context) (returnErr error) {
 	if lockID == 0 {
 		lockID = 2026112601
 	}
-	if _, err := conn.ExecContext(ctx, \`SELECT pg_advisory_lock($1)\`, lockID); err != nil {
+	if _, err := conn.ExecContext(ctx, `SELECT pg_advisory_lock($1)`, lockID); err != nil {
 		return fmt.Errorf("acquire migration advisory lock: %w", err)
 	}
 	defer func() {
 		unlockCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
-		if _, err := conn.ExecContext(unlockCtx, \`SELECT pg_advisory_unlock($1)\`, lockID); err != nil && returnErr == nil {
+		if _, err := conn.ExecContext(unlockCtx, `SELECT pg_advisory_unlock($1)`, lockID); err != nil && returnErr == nil {
 			returnErr = fmt.Errorf("release migration advisory lock: %w", err)
 		}
 	}()
 
-	if _, err := conn.ExecContext(ctx, \`
+	if _, err := conn.ExecContext(ctx, `
 		CREATE TABLE IF NOT EXISTS schema_migrations (
 			version BIGINT PRIMARY KEY,
 			name TEXT NOT NULL,
 			checksum CHAR(64) NOT NULL,
 			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-		)\`); err != nil {
+		)`); err != nil {
 		return fmt.Errorf("create migration ledger: %w", err)
 	}
 
@@ -218,7 +218,7 @@ func applyOne(ctx context.Context, conn *sql.Conn, migration Migration) error {
 		return fmt.Errorf("execute migration %d (%s): %w", migration.Version, migration.Name, err)
 	}
 	if _, err := tx.ExecContext(ctx,
-		\`INSERT INTO schema_migrations (version, name, checksum) VALUES ($1, $2, $3)\`,
+		`INSERT INTO schema_migrations (version, name, checksum) VALUES ($1, $2, $3)`,
 		migration.Version, migration.Name, migration.Checksum,
 	); err != nil {
 		return fmt.Errorf("record migration %d: %w", migration.Version, err)
@@ -231,7 +231,7 @@ func applyOne(ctx context.Context, conn *sql.Conn, migration Migration) error {
 
 func readApplied(ctx context.Context, conn *sql.Conn) (map[int64]AppliedMigration, error) {
 	rows, err := conn.QueryContext(ctx,
-		\`SELECT version, name, checksum, applied_at FROM schema_migrations ORDER BY version\`)
+		`SELECT version, name, checksum, applied_at FROM schema_migrations ORDER BY version`)
 	if err != nil {
 		return nil, fmt.Errorf("read migration ledger: %w", err)
 	}
@@ -261,7 +261,7 @@ func (r Runner) Status(ctx context.Context) ([]AppliedMigration, error) {
 	defer conn.Close()
 	var exists bool
 	if err := conn.QueryRowContext(ctx,
-		\`SELECT to_regclass('schema_migrations') IS NOT NULL\`).Scan(&exists); err != nil {
+		`SELECT to_regclass('schema_migrations') IS NOT NULL`).Scan(&exists); err != nil {
 		return nil, fmt.Errorf("check migration ledger: %w", err)
 	}
 	if !exists {
