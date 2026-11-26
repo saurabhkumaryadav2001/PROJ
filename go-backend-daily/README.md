@@ -21,6 +21,7 @@ Sequential daily curriculum from fundamentals to production backend.
 - **Day 17: Observability — structured JSON logs, Prometheus counters/gauges/histograms, bounded route labels, W3C Trace Context propagation, spans, Prometheus/Grafana and PromQL** ([lesson](day-17/README.md), [API](day-17/observabilityapi/main.go), [metrics](day-17/observabilityapi/metrics.go), [tracing](day-17/observabilityapi/trace.go), [middleware](day-17/observabilityapi/middleware.go), [tests](day-17/observabilityapi/observability_test.go), [Compose](day-17/compose.yaml))
 - **Day 18: Authentication & Authorization — PBKDF2 password hashing, HS256 JWT access tokens, opaque refresh-token rotation, Bearer middleware and RBAC** ([lesson](day-18/README.md), [auth core](day-18/authapi/core.go), [HTTP API](day-18/authapi/api.go), [tests](day-18/authapi/auth_test.go), [PostgreSQL schema](day-18/migrations/001_auth_tables.sql))
 - **Day 19: PostgreSQL-backed authentication — `database/sql`, pgx, connection pooling, parameterized SQL, unique-email constraints, transactions, `SELECT FOR UPDATE`, refresh-token rotation and replay detection** ([lesson](day-19/README.md), [PostgreSQL repository excerpt](day-19/authapi/postgres_store.go), [migration](day-19/migrations/001_auth_tables.sql); complete modular project and tests are attached with the lesson)
+- **Day 20: Database migrations, integration testing and production hardening — immutable versioned SQL, embedded migrations, migration ledger, SHA-256 drift detection, PostgreSQL advisory locks, transactional application, unit/integration tests and expand-and-contract deployment** ([lesson](day-20/README.md), [migration runner](day-20/migrationapi/migrations.go), [database pool](day-20/migrationapi/db.go), [tests](day-20/migrationapi/migrations_test.go), [PostgreSQL integration test](day-20/migrationapi/postgres_integration_test.go), [SQL migrations](day-20/migrationapi/migrations/))
 
 ## Day 17 quick start
 
@@ -168,4 +169,30 @@ go test ./day-19/authapi
 go test -race ./day-19/authapi
 go vet ./day-19/authapi
 go run -tags pgx ./day-19/authapi
+~~~
+
+
+## Day 20 quick start
+
+Day 20 uses the existing pgx v5.7.2 module dependency. Unit tests use a fake SQL driver and require no live database:
+
+~~~bash
+go test ./day-20/migrationapi
+go test -race ./day-20/migrationapi
+go vet ./day-20/migrationapi
+go test -cover ./day-20/migrationapi
+~~~
+
+Apply migrations and inspect the ledger using a disposable PostgreSQL database:
+
+~~~bash
+go mod download github.com/jackc/pgx/v5
+go run -tags pgx ./day-20/migrationapi up
+go run -tags pgx ./day-20/migrationapi status
+~~~
+
+Optional PostgreSQL integration test (TEST_DATABASE_URL must point to a disposable test database):
+
+~~~bash
+go test -tags="integration pgx" ./day-20/migrationapi -run TestPostgresMigrationRunnerIsIdempotentAndDetectsDrift -count=1 -v
 ~~~
